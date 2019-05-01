@@ -2,7 +2,7 @@ import GameComponent from "../../GameComponent.js";
 import React from "react";
 import UserAPI from "../../UserApi.js";
 
-export default class Pvr extends GameComponent {
+export default class PrR extends GameComponent {
   constructor(props) {
     super(props);
     // any other logic here...
@@ -12,29 +12,34 @@ export default class Pvr extends GameComponent {
     const isPirate = myId === creator;
     this.state = {
       isPirate: isPirate,
-      isRacoon: "isRacoon"
+      isRacoon: !isPirate,
+      characters: [
+        { x: 0, y: 0, type: "racoon" },
+        { x: 0, y: 0, type: "racoon" }
+      ]
     };
   }
 
   render() {
     if (this.state.isPirate) {
-      return <h1>I am the pirate!!</h1>;
+      return (
+        <div>
+          <h1>I am the pirate!!</h1>
+          {this.state.characters.map(function(character) {
+            return (
+              <img src="http://www.icenews.is/wp-content/uploads/2018/03/raccoon-1905528_1920-700x487.jpg" />
+            );
+          })}
+        </div>
+      );
     }
-    return <h1>I am the racoon!!</h1>;
-    var id = this.getSessionId();
-    var users = this.getSessionUserIds().map(user_id => (
-      <li key={user_id}>{user_id}</li>
-    ));
-    var creator = UserAPI.getName(this.getSessionCreatorUserId());
     return (
       <div>
-        <p>Session ID: {id}</p>
-        <p>Session creator: {creator}</p>
-
-        <p>Session users:</p>
-        <p>{this.getMyUserId()}</p>
-
-        <ul> {users} </ul>
+        <h1>I am the racoon!!</h1>
+        {this.state.characters.map(function(character) {
+          console.log(character);
+          return <p>{character.type}</p>;
+        })}
       </div>
     );
   }

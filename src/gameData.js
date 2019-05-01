@@ -105,7 +105,7 @@ const gameData = {
     title: "PVR",
     authors: "Kevin lima & Jason Paulino",
     description: "pirates versus versus raccoon.",
-    minUsers: 2,
+    minUsers: 1,
     maxUsers: 2,
     component: PVR
   }
