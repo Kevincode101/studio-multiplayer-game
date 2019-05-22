@@ -13,19 +13,39 @@ export default class PrR extends GameComponent {
     this.state = {
       isPirate: isPirate,
       isRaccoon: !isPirate,
+      Pscore: 0,
+      Rscore: 0,
       characters: [
-        { x: "20px", y: "100px", type: "pirate" },
-        { x: "100px", y: "20px", type: "pirate" },
-        { x: "300px", y: "200px", type: "pirate" },
-        { x: "400px", y: "50px", type: "raccoon" },
-        { x: "600px", y: "100px", type: "raccoon" },
-        { x: "80px", y: "110px", type: "raccoon" }
+        { x: "20px", y: "200px", type: "pirate", visible: true },
+        { x: "100px", y: "20px", type: "pirate", visible: true },
+        { x: "300px", y: "200px", type: "pirate", visible: true },
+        { x: "400px", y: "50px", type: "raccoon", visible: true },
+        { x: "600px", y: "100px", type: "raccoon", visible: true },
+        { x: "80px", y: "110px", type: "raccoon", visible: true }
       ]
     };
   }
+
   handleImageClick(i) {
-    alert("BANG!!");
+    console.log(this.state.characters);
+    if (this.state.characters[i].type === "raccoon" && this.state.isPirate) {
+      this.setState({ Pscore: this.state.Pscore + 1 });
+      let newCharacters = this.state.characters;
+      newCharacters[i].visible = false;
+      this.setState({ characters: newCharacters });
+      console.log("You clicked the dang raccoon yearg matii!!!!");
+    } else if (
+      this.state.characters[i].type === "pirate" &&
+      this.state.isRaccoon
+    ) {
+      this.setState({ Rscore: this.state.Rscore + 1 });
+      let newCharacters = this.state.characters;
+      newCharacters[i].visible = false;
+      this.setState({ characters: newCharacters });
+      console.log("The raccoon race has elimanted another HUMAN!!!!!!!");
+    }
   }
+
   render() {
     var name;
     if (this.state.isPirate === true) {
@@ -34,11 +54,11 @@ export default class PrR extends GameComponent {
       name = "raccoon";
     }
 
-    var characters = this.state.characters.map(character => {
-      if (character.type === "pirate") {
+    var characters = this.state.characters.map((character, i) => {
+      if (character.type === "pirate" && character.visible === true) {
         return (
           <img
-            onClick={() => this.handleImageClick()}
+            onClick={() => this.handleImageClick(i)}
             alt="character"
             src="https://hardybm.files.wordpress.com/2010/08/mean-pirate.png"
             style={{
@@ -51,10 +71,10 @@ export default class PrR extends GameComponent {
             }}
           />
         );
-      } else if (character.type === "raccoon") {
+      } else if (character.type === "raccoon" && character.visible === true) {
         return (
           <img
-            onClick={() => this.handleImageClick()}
+            onClick={() => this.handleImageClick(i)}
             alt="character"
             src="http://www.icenews.is/wp-content/uploads/2018/03/raccoon-1905528_1920-700x487.jpg"
             style={{
@@ -67,12 +87,16 @@ export default class PrR extends GameComponent {
             }}
           />
         );
+      } else {
+        return null;
       }
     });
 
     return (
       <div>
         <h1>I am the {name}!!</h1>
+        <p>PScore: {this.state.Pscore}</p>
+        <p>RScore: {this.state.Rscore}</p>
         <div>{characters}</div>
       </div>
     );
