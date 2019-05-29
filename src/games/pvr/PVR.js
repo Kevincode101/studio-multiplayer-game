@@ -9,6 +9,7 @@ export default class PrR extends GameComponent {
     // this.state = {"Is Priate"};
     const myId = this.getMyUserId();
     const creator = this.getSessionCreatorUserId();
+    console.log(myId, creator);
     const isPirate = myId === creator;
     this.state = {
       isPirate: isPirate,
@@ -24,24 +25,32 @@ export default class PrR extends GameComponent {
         { x: "80px", y: "110px", type: "raccoon", visible: true }
       ]
     };
+    this.getSessionDatabaseRef().set(this.state);
+  }
+  onSessionDataChanged(data){
+    this.setState({Pscore:data.Pscore, Rscore:data.Rscore,characters:data.characters});
   }
 
   handleImageClick(i) {
     console.log(this.state.characters);
     if (this.state.characters[i].type === "raccoon" && this.state.isPirate) {
-      this.setState({ Pscore: this.state.Pscore + 1 });
+      this.getSessionDatabaseRef().update({ Pscore: this.state.Pscore + 1 });
+      // this.setState({ Pscore: this.state.Pscore + 1 });
       let newCharacters = this.state.characters;
       newCharacters[i].visible = false;
-      this.setState({ characters: newCharacters });
+      this.getSessionDatabaseRef().update({ characters: newCharacters });
+      // this.setState({ characters: newCharacters });
       console.log("You clicked the dang raccoon yearg matii!!!!");
     } else if (
       this.state.characters[i].type === "pirate" &&
       this.state.isRaccoon
     ) {
-      this.setState({ Rscore: this.state.Rscore + 1 });
+      this.getSessionDatabaseRef().update({ Rscore: this.state.Rscore + 1 });
+      // this.setState({ Rscore: this.state.Rscore + 1 });
       let newCharacters = this.state.characters;
       newCharacters[i].visible = false;
-      this.setState({ characters: newCharacters });
+      this.getSessionDatabaseRef().update({ characters: newCharacters });
+      // this.setState({ characters: newCharacters });
       console.log("The raccoon race has elimanted another HUMAN!!!!!!!");
     }
   }
@@ -102,20 +111,3 @@ export default class PrR extends GameComponent {
     );
   }
 }
-
-// {this.state.characters.map(function(character, i) {
-//             return (
-//               <img
-//                 onClick={() => this.handleImageClick(i)}
-//                 style={{
-//                   position: "absolute",
-//                   height: "100px",
-//                   width: "100px",
-//                   "border-radius": "50px",
-//                   left: character.x,
-//                   top: character.y
-//                 }}
-//                 src="http://www.icenews.is/wp-content/uploads/2018/03/raccoon-1905528_1920-700x487.jpg"
-//               />
-//             );
-//           })}
